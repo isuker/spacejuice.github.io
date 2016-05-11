@@ -215,7 +215,7 @@
 
 
 				var loader = new THREE.ImageLoader( manager );
-				loader.load( 'tex/grill.jpg', function ( image ) {
+				loader.load( 'tex/coffee.jpg', function ( image ) {
 
 					texture.image = image;
 					texture.needsUpdate = true;
@@ -225,7 +225,7 @@
 				// model
 
 				var loader = new THREE.OBJLoader( manager );
-				loader.load( 'mod/grill.obj', function ( object ) {
+				loader.load( 'mod/coffee.obj', function ( object ) {
 					object.traverse( function ( child ) {
 
 						if ( child instanceof THREE.Mesh ) {
