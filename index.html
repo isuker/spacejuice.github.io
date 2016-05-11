@@ -7,7 +7,7 @@
 <!-- include three.js -->
 <script src='vendor/three.js/build/three.js'></script>
 <script src='vendor/three.js/build/three.min.js'></script>
-<script src='vendor/three.js/stats.min.js'></script>
+<script src='vendor/three.js/libs/stats.min.js'></script>
 
 <!-- include js-aruco -->
 <script src='vendor/js-aruco/svd.js'></script>
@@ -24,6 +24,35 @@
 </head>
 
 <body style='margin: 0px; overflow: hidden;'>
+
+<div id='info' style='position: absolute; top: 0px; width: 100%;font-family:arial; font-weight: bolder; padding-top: 5px; text-align:center;'>
+	Source:
+	<a class='webcam' href='javascript:void();'>webcam</a> -
+	<a class='image'  href='javascript:void();'>image</a> -
+	<a class='video'  href='javascript:void();'>video</a>
+</div>
+
+<div id='performanceEnabler' style='position: absolute; top: 0px; right: 0px; text-align: right;background-color:rgba(255,255,255,0.5);padding-left: 10px; padding-bottom: 10px;border-width: 1px;
+  border-style: solid;'>
+	<div style='text-align: center;'>OPTIONS</div>
+	<hr/>
+	<label id='detectMarkersEnabled' title='to enable/disable marker detection in video'>
+		detectMarkers	<input type="checkbox"> 
+	</label>
+	<br/>
+	<label id='markerToObject3DEnabled' title='to enable/disable marker to object3d conversion'>
+		markerToObject3D <input type="checkbox"> 
+	</label>
+	<br/>
+	<label id='webglRenderEnabled' title='to enable/disable webgl rendering'>
+		webglRender	<input type="checkbox"> 
+	</label>
+	<br/>
+	<label id='markerDebugEnabled' title='to enable/disable marker debug'>
+		marker debug	<input type="checkbox"> 
+	</label>
+	<br/>
+</div>
 
 <script>
 	//////////////////////////////////////////////////////////////////////////////////
@@ -52,6 +81,28 @@
 	var detectMarkersEnabled	= true
 	var markerToObject3DEnabled	= true
 	var webglRenderEnabled		= true
+	
+	document.querySelector('#detectMarkersEnabled input').checked	= detectMarkersEnabled
+	document.querySelector('#detectMarkersEnabled input').addEventListener('change', function(){
+		detectMarkersEnabled = document.querySelector('#detectMarkersEnabled input').checked 
+	})
+
+	document.querySelector('#markerToObject3DEnabled input').checked= markerToObject3DEnabled
+	document.querySelector('#markerToObject3DEnabled input').addEventListener('change', function(){
+		markerToObject3DEnabled = document.querySelector('#markerToObject3DEnabled input').checked 
+	})
+
+	document.querySelector('#webglRenderEnabled input').checked	= webglRenderEnabled
+	document.querySelector('#webglRenderEnabled input').addEventListener('change', function(){
+		webglRenderEnabled = document.querySelector('#webglRenderEnabled input').checked
+		// clear the webgl canvas - thus the last webgl rendering disapears
+		renderer.clear()
+	})
+
+	document.querySelector('#markerDebugEnabled input').checked	= false
+	document.querySelector('#markerDebugEnabled input').addEventListener('change', function(){
+		jsArucoMarker.debugEnabled = document.querySelector('#markerDebugEnabled input').checked
+	})
 
 	//////////////////////////////////////////////////////////////////////////////////
 	//		init Stats for detectMarkers
@@ -70,6 +121,23 @@
 	renderStats.domElement.style.bottom = '0px'
 	renderStats.domElement.style.left = '0px'
 
+	//////////////////////////////////////////////////////////////////////////////////
+	//		Handle ui button
+	//////////////////////////////////////////////////////////////////////////////////
+	document.querySelector('#info .webcam').addEventListener('click', function(event){
+		location.hash	= '#webcam'
+		location.reload()
+	})
+
+	document.querySelector('#info .image').addEventListener('click', function(event){
+		location.hash	= '#image'
+		location.reload()
+	})
+
+	document.querySelector('#info .video').addEventListener('click', function(event){
+		location.hash	= '#video'
+		location.reload()
+	})
 
 	//////////////////////////////////////////////////////////////////////////////////
 	//		Init
@@ -101,7 +169,17 @@
 	//		add an object in the markerObject3D
 	//////////////////////////////////////////////////////////////////////////////////
 
+	// add some debug display
 	;(function(){
+	//	var geometry = new THREE.PlaneGeometry(1,1,10,10)
+	//	var material = new THREE.MeshBasicMaterial( {
+	//		wireframe : true
+	//	})
+	//	var mesh = new THREE.Mesh(geometry, material);
+	//	markerObject3D.add( mesh );
+
+		var mesh = new THREE.AxisHelper
+		markerObject3D.add( mesh );
 		
 				// LIGHTS
 				var ambient = new THREE.AmbientLight( 0x404040 );
@@ -164,6 +242,17 @@
 	
 	})()
 
+	// add a awesome logo to the scene
+	//;(function(){
+	//	var material = new THREE.SpriteMaterial({
+	//		map: THREE.ImageUtils.loadTexture( 'images/logo.png' ),
+	//	});
+	//	var geometry = new THREE.BoxGeometry(1,1,1)
+	//	var object3d = new THREE.Sprite(material );
+	//	object3d.scale.set( 2, 2, 1 );
+	//	markerObject3D.add(object3d)
+	//})()
+
 	//////////////////////////////////////////////////////////////////////////////////
 	//		render the whole thing on the page
 	//////////////////////////////////////////////////////////////////////////////////
@@ -205,8 +294,22 @@
 
 	// init the marker recognition
 	var jsArucoMarker	= new THREEx.JsArucoMarker()
-	var videoGrabbing = new THREEx.WebcamGrabbing()
-	
+
+	// if no specific image source is specified, take the webcam by default
+	if( location.hash === '' )	location.hash = '#image'
+
+	// init the image source grabbing
+	if( location.hash === '#video' ){
+		var videoGrabbing = new THREEx.VideoGrabbing()
+		jsArucoMarker.videoScaleDown = 2
+	}else if( location.hash === '#webcam' ){
+		var videoGrabbing = new THREEx.WebcamGrabbing()
+		jsArucoMarker.videoScaleDown = 2
+	}else if( location.hash === '#image' ){
+		var videoGrabbing = new THREEx.ImageGrabbing()
+		jsArucoMarker.videoScaleDown = 10
+	}else console.assert(false)
+
 	// attach the videoGrabbing.domElement to the body
         document.body.appendChild(videoGrabbing.domElement)
 
