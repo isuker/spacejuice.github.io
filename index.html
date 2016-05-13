@@ -138,14 +138,14 @@
 				};
 
 				var loader = new THREE.ImageLoader( manager );
-				loader.load( 'tex/coffee.jpg', function ( image ) {
+				loader.load( 'tex/ebook.jpg', function ( image ) {
 					texture.image = image;
 					texture.needsUpdate = true;
 				} );
 				
 				// model
 				var loader = new THREE.OBJLoader( manager );
-				loader.load( 'mod/coffee.obj', function ( object ) {
+				loader.load( 'mod/ebook.obj', function ( object ) {
 					object.traverse( function ( child ) {
 						if ( child instanceof THREE.Mesh ) {
 							child.material.map = texture;
