@@ -20,15 +20,15 @@ THREEx.JsArucoMarker = function(){
 	debugElement.style.position = 'absolute'
 	debugElement.style.top = '0px'
 	debugElement.style.left = '0px'
-	debugElement.style.opacity = 0.2
+	debugElement.style.opacity = 0.5
 	
 	var debugInfoElement	= document.createElement('div')
 	debugElement.appendChild( debugInfoElement )
 	debugInfoElement.classList.add('info')
 	debugInfoElement.innerHTML = ''
-		+ '<div>canvasSize: <span class="canvasSize">n/a</span></div>'
-		+ '<div>videoScaleDown: <span class="videoScaleDown">n/a</span></div>'
-		+ '<div>videoSize: <span class="videoSize">n/a</span></div>'
+	//	+ '<div>canvasSize: <span class="canvasSize">n/a</span></div>'
+	//	+ '<div>videoScaleDown: <span class="videoScaleDown">n/a</span></div>'
+	//	+ '<div>videoSize: <span class="videoSize">n/a</span></div>'
 	
 	/**
 	 * Detect Marker in a videoElement or imageElement
@@ -82,13 +82,13 @@ THREEx.JsArucoMarker = function(){
 
 		// display markers on canvas for debug
 		if( this.debugEnabled === true ){
-			debugElement.querySelector('.info .videoScaleDown').innerHTML = this.videoScaleDown
-			if( videoElement.videoWidth !== undefined ){
-				debugElement.querySelector('.info .videoSize').innerHTML = videoElement.videoWidth + 'x' + videoElement.videoHeight
-			}else{
-				debugElement.querySelector('.info .videoSize').innerHTML = videoElement.naturalWidth + 'x' + videoElement.naturalHeight				
-			}
-			debugElement.querySelector('.info .canvasSize').innerHTML = canvasElement.width + 'x' + canvasElement.height
+		//	debugElement.querySelector('.info .videoScaleDown').innerHTML = this.videoScaleDown
+		//	if( videoElement.videoWidth !== undefined ){
+		//		debugElement.querySelector('.info .videoSize').innerHTML = videoElement.videoWidth + 'x' + videoElement.videoHeight
+		//	}else{
+		//		debugElement.querySelector('.info .videoSize').innerHTML = videoElement.naturalWidth + 'x' + videoElement.naturalHeight				
+		//	}
+		//	debugElement.querySelector('.info .canvasSize').innerHTML = canvasElement.width + 'x' + canvasElement.height
 			drawDebug(markers, canvasElement)
 		}
 
@@ -174,7 +174,7 @@ THREEx.JsArucoMarker = function(){
 
 			context.strokeStyle = "green";
 			context.strokeRect(corners[0].x - 2, corners[0].y - 2, 4, 4);
-			// console.log('marker', marker.id)
+			//console.log('marker', marker.id)
 
 			context.fillStyle = "blue";
 			context.font = "bold 10px Arial";
