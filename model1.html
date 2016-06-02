@@ -31,7 +31,7 @@
 </div>
 
 <div id='scanning' style='position: absolute; bottom: 20px; width: 100%;font-family:arial; font-weight: bolder;font-size:150%;text-align:center;'>
-	<a class='scan'  href='javascript:void();' style='background-color:white;color:black;text-decoration:none;border:2px solid black;border-radius:5px;padding:5px;'>scan code</a>
+	<a class='scan'  href='javascript:void();' style='background-color:white;color:black;text-decoration:none;border:2px solid black;border-radius:5px;padding:5px;'>scan new code</a>
 </div>
 
 <script>
@@ -56,6 +56,14 @@
 	})()
 	
 	//////////////////////////////////////////////////////////////////////////////////
+	//		enabled/disable various parts
+	//////////////////////////////////////////////////////////////////////////////////
+	//var detectMarkersEnabled	= true
+	//var markerToObject3DEnabled = true
+	//var webglRenderEnabled = true
+	//var markerDebugEnabled = true
+
+	//////////////////////////////////////////////////////////////////////////////////
 	//		Handle ui button
 	//////////////////////////////////////////////////////////////////////////////////
 	document.querySelector('#info .webcam').addEventListener('click', function(event){
@@ -72,11 +80,11 @@
 		location.hash	= '#video'
 		location.reload()
 	})
-	
-	document.querySelector('#scanning .scan').addEventListener('click', function(event){
-		location.hash	= '#scan'
-	})
 
+	document.querySelector('#scanning .scan').addEventListener('click', function(event){
+		window.location.href = "index.html";
+	})
+	
 	//////////////////////////////////////////////////////////////////////////////////
 	//		Init
 	//////////////////////////////////////////////////////////////////////////////////
@@ -108,6 +116,7 @@
 	//////////////////////////////////////////////////////////////////////////////////
 
 	;(function(){
+
 				// LIGHTS
 				var ambient = new THREE.AmbientLight( 0x404040 );
 				scene.add( ambient );
@@ -118,28 +127,51 @@
 				dirLight.position.multiplyScalar( 100 );
 				scene.add(camera)
 				camera.add( dirLight );
+		
+				// texture
+				var manager = new THREE.LoadingManager();
+				manager.onProgress = function ( item, loaded, total ) {
+					console.log( item, loaded, total );
+				};
+
+				var texture = new THREE.Texture();
+				var onProgress = function ( xhr ) {
+					if ( xhr.lengthComputable ) {
+						var percentComplete = xhr.loaded / xhr.total * 100;
+						console.log( Math.round(percentComplete, 2) + '% downloaded' );
+					}
+				};
+
+				var onError = function ( xhr ) {
+				};
+
+				var loader = new THREE.ImageLoader( manager );
+				loader.load( 'models/coffee.jpg', function ( image ) {
+					texture.image = image;
+					texture.needsUpdate = true;
+				} );
+				
+				// model
+				var loader = new THREE.OBJLoader( manager );
+				loader.load( 'models/coffee.obj', function ( object ) {
+					object.traverse( function ( child ) {
+						if ( child instanceof THREE.Mesh ) {
+							child.material.map = texture;
+						}
+					} );
+					object.scale.set( 0.01, 0.01, 0.01 );
+					markerObject3D.add( object );
+				}, onProgress, onError );
 	})()
 
-	
-	// add some debug display
-	;(function(){
-		var geometry = new THREE.PlaneGeometry(0.5,0.5,1,1)
-		var material = new THREE.MeshBasicMaterial( {
-			color: 0x80AA3C,
-			wireframe : false
-		})
-		var mesh = new THREE.Mesh(geometry, material);
-		markerObject3D.add( mesh );
-	})()
-	
-	 //add a logo to the scene
+	// add a awesome logo to the scene
 	//;(function(){
 	//	var material = new THREE.SpriteMaterial({
-	//		map: THREE.ImageUtils.loadTexture( 'images/detector.png' ),
+	//		map: THREE.ImageUtils.loadTexture( 'images/logo.png' ),
 	//	});
 	//	var geometry = new THREE.BoxGeometry(1,1,1)
 	//	var object3d = new THREE.Sprite(material );
-	//	object3d.scale.set( 0.5, 0.5, 0.5 );
+	//	object3d.scale.set( 2, 2, 1 );
 	//	markerObject3D.add(object3d)
 	//})()
 
@@ -156,7 +188,9 @@
 
 	// render the scene
 	onRenderFcts.push(function(){	
+		//if( webglRenderEnabled === true ){
 			renderer.render( scene, camera );
+		//}
 	})
 
 	// run the rendering loop
@@ -191,7 +225,7 @@
 		jsArucoMarker.videoScaleDown = 2
 	}else if( location.hash === '#image' ){
 		var videoGrabbing = new THREEx.ImageGrabbing()
-		jsArucoMarker.videoScaleDown = 5
+		jsArucoMarker.videoScaleDown = 10
 	}else console.assert(false)
 
 	// attach the videoGrabbing.domElement to the body
@@ -204,42 +238,21 @@
 	markerObject3D.visible	= false
 	// process the image source with the marker recognition
 	onRenderFcts.push(function(){
+		//if( detectMarkersEnabled === false )	return
 		
 		var domElement	= videoGrabbing.domElement
 		var markers	= jsArucoMarker.detectMarkers(domElement)
 
+		//if( markerToObject3DEnabled === false )	return
 		markerObject3D.visible = false
 
 		// see if this.markerId has been found
 		markers.forEach(function(marker){
-		
-	//		if( marker.id == 1) {
-	//			if( location.hash == '#scan') window.location.href = "model1.html";
-	//			markerObject3D.visible = true
-	//		}
-			
-	//		if( marker.id == 2) {
-	//			if( location.hash == '#scan') window.location.href = "model2.html";
-	//			markerObject3D.visible = true
-	//		}
-
-	//		if( marker.id == 3) {
-	//			if( location.hash == '#scan') window.location.href = "model3.html";
-	//			markerObject3D.visible = true
-	//		}
-
-	//		if( marker.id == 4) {
-	//			if( location.hash == '#scan') window.location.href = "model4.html";
-	//			markerObject3D.visible = true
-	//		}		
-
-				if( location.hash == '#scan') {
-				window.location.href = "model"+marker.id+".html";
-				}
+			// if( marker.id !== 265 )	return
 
 			jsArucoMarker.markerToObject3D(marker, markerObject3D)
 
-			//markerObject3D.visible = true
+			markerObject3D.visible = true
 		})
 	})
 </script></body>
