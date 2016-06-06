@@ -114,14 +114,14 @@
 				};
 
 				var loader = new THREE.ImageLoader( manager );
-				loader.load( 'models/scene01.jpg', function ( image ) {
+				loader.load( 'models/model03.jpg', function ( image ) {
 					texture.image = image;
 					texture.needsUpdate = true;
 				} );
 				
 				// model
 				var loader = new THREE.OBJLoader( manager );
-				loader.load( 'models/scene01.obj', function ( object ) {
+				loader.load( 'models/model.obj', function ( object ) {
 					object.traverse( function ( child ) {
 						if ( child instanceof THREE.Mesh ) {
 							child.material.map = texture;
