@@ -9,8 +9,8 @@
 	<body>
 
 		<script src="vendor/three.js/build/three.min.js"></script>
-		<script src="vendor/three.js/js/controls/OrbitControls.js"></script>
-		<script src="vendor/three.js/js/loaders/OBJLoader.js"></script>
+		<script src="vendor/three.js/controls/OrbitControls.js"></script>
+		<script src="vendor/three.js/loaders/OBJLoader.js"></script>
 
 		<script>
 
@@ -82,7 +82,7 @@
 
 
 				var loader = new THREE.ImageLoader( manager );
-				loader.load( 'tex/gehaeuse.jpg', function ( image ) {
+				loader.load( 'models/gehaeuse.jpg', function ( image ) {
 
 					texture.image = image;
 					texture.needsUpdate = true;
@@ -92,7 +92,7 @@
 				// model
 
 				var loader = new THREE.OBJLoader( manager );
-				loader.load( 'mod/gehaeuse.obj', function ( object ) {
+				loader.load( 'models/gehaeuse.obj', function ( object ) {
 					object.traverse( function ( child ) {
 
 						if ( child instanceof THREE.Mesh ) {
