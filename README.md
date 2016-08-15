@@ -1,1 +1,1 @@
-Web-based augmented reality
+Web-based augmented reality with multiple markers
