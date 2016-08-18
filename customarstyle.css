@@ -1,0 +1,82 @@
+body {
+	margin:0px;
+	overflow:hidden;
+	background-color:#404040;
+}
+
+#info {
+	position:absolute;
+	width:100%;
+	font-family:Calibri;
+	font-weight:bolder;
+	font-size:150%;
+	padding:20px;
+	line-height:50px;
+	text-align:center;
+}
+
+#cambutton{
+	background-color:#262528;
+	color:gray;
+	text-decoration:none;
+	border:1px solid black;
+	border-radius:5px;
+	padding:20px 40px 20px 40px;
+	box-shadow:0px 5px 10px 0px black;
+	transition: all 0.3s ease-in-out 0s;
+}
+
+#cambutton:hover{
+	background-color:#404040;
+}
+
+#button{
+	background-color:#262528;
+	color:gray;
+	text-decoration:none;
+	border:1px solid black;
+	padding:6px 20px 6px 20px;
+	box-shadow:0px 5px 10px 0px black;
+	transition: all 0.3s ease-in-out 0s;
+}
+
+#button:hover{
+	background-color:#404040;
+}
+
+#menubutton{
+	display:inline-block;
+	background-color:#262528;
+	color:gray;
+	text-decoration:none;
+	border:1px solid black;
+	border-radius:10px;
+	width:100%;
+	padding-top:20px;
+	padding-bottom:20px;
+	margin:20px;
+	box-shadow:0px 5px 10px 0px black;
+	transition: all 0.3s ease-in-out 0s;
+}
+
+#menubutton:hover{
+	background-color:#404040;
+}
+
+ #infotext{
+	color:gray;
+}
+
+#menubox {
+	display:inline-block;
+	position:absolute;
+	color:gray;
+	top:10%;
+	width:50%;
+	left:25%;
+	font-family:Calibri;
+	font-weight:bolder;
+	font-size:150%;
+	line-height:50px;
+	text-align:center;
+}
