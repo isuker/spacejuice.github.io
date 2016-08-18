@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+
+<html lang="de">
+
+	<head>
+		<title>CUSTOMar</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<link rel="shortcut icon" type="image/x-icon" href="./images/favicon.ico" />
+		<link rel="stylesheet" href="customarstyle.css">
+		
+		<script src='vendor/three.js/build/three.js'></script>
+		<script src='vendor/three.js/build/three.min.js'></script>
+		<script src='vendor/js-aruco/svd.js'></script>
+		<script src='vendor/js-aruco/posit1-patched.js'></script>
+		<script src='vendor/js-aruco/cv.js'></script>
+		<script src='vendor/js-aruco/aruco.js'></script>
+		<script src='js/threex.webcamgrabbing.js'></script>
+		<script src='js/threex.jsarucomarker.js'></script>
+		<script src="vendor/three.js/loaders/OBJLoader.js"></script>
+	</head>
+
+	<body>
+
+		<div id='info'>
+			<a id='button' class='scan'  href='javascript:void();'>Neuer Marker scannen</a>
+		</div>
+
+		<script>
+			var modelnumber='01'
+			var modelscale=0.008
+			var imagesource='#webcam';
+			var webglRenderEnabled=true
+			//Funktionalitätstest--------------------------------------------------------------
+			;(function(){
+				var hasGetUserMedia=(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia) ? true:false
+				var hasMediaStreamTrackSources=MediaStreamTrack.getSources ? true:false
+				var hasWebGL=(function () {try {var canvas=document.createElement('canvas'); return !! (window.WebGLRenderingContext && (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));} catch (e) {return false;}})()
+				
+				if(hasWebGL===false){
+					alert('Ihr Browser unterstützt leider navigator.getUserMedia() nicht')			
+				}
+				
+				if(hasGetUserMedia===false){
+					alert('Ihr Browser unterstützt leider navigator.getUserMedia() nicht')		
+				}
+			})()
+			
+			//GUI------------------------------------------------------------------------------
+			document.querySelector('#info .scan').addEventListener('click',function(event){
+				window.location.href="cam_selector.html";
+			})		
+			
+			//Initialisierung-----------------------------------------------------------------
+			var renderer=new THREE.WebGLRenderer({
+				antialias:true,
+				alpha:true,
+			});
+			renderer.setSize(window.innerWidth,window.innerHeight);
+			document.body.appendChild(renderer.domElement);
+
+			var onRenderFcts=[];
+
+			var scene=new THREE.Scene()
+			var camera=new THREE.PerspectiveCamera(40,window.innerWidth / window.innerHeight,0.01,1000);
+			camera.position.z=2;
+
+			//Modell und Textur---------------------------------------------------------------			
+			var markerObject3D=new THREE.Object3D()
+			scene.add(markerObject3D)
+
+			;(function(){
+				var ambient=new THREE.AmbientLight(0x404040);
+				scene.add(ambient);
+						
+				dirLight=new THREE.DirectionalLight(0xffffff,1);
+				dirLight.color.setHSL(0,0,1);
+				dirLight.position.set(2,2,2);
+				dirLight.position.multiplyScalar(100);
+				scene.add(camera)
+				camera.add(dirLight);
+				
+				var manager=new THREE.LoadingManager();
+				manager.onProgress=function (item,loaded,total) {
+					console.log(item,loaded,total);
+				};
+
+				var texture=new THREE.Texture();
+				var onProgress=function (xhr) {
+					if (xhr.lengthComputable) {
+						var percentComplete=xhr.loaded / xhr.total * 100;
+						console.log(Math.round(percentComplete,2)+'% downloaded');
+					}
+				};
+
+				var onError=function (xhr) {
+				};
+
+				var loader=new THREE.ImageLoader(manager);
+				loader.load('models/model'+modelnumber+'.jpg',function (image) {
+					texture.image=image;
+					texture.needsUpdate=true;
+				});
+						
+				var loader=new THREE.OBJLoader(manager);
+				loader.load('models/model'+modelnumber+'.obj',function (object) {
+					object.traverse(function (child) {
+						if (child instanceof THREE.Mesh) {
+							child.material.map=texture;
+						}
+					});
+					object.scale.set(modelscale,modelscale,modelscale);
+					markerObject3D.add(object);
+				},onProgress,onError);
+			})()
+
+			//Scene Rendern-----------------------------------------------------------------
+			window.addEventListener('resize',function(){
+				renderer.setSize(window.innerWidth,window.innerHeight)
+				camera.aspect=window.innerWidth / window.innerHeight
+				camera.updateProjectionMatrix()
+			},false)
+			onRenderFcts.push(function(){	
+				<!-- if(webglRenderEnabled===true){ -->
+					renderer.render(scene,camera);
+				<!-- } -->
+			})
+			
+			var previousTime=performance.now()
+			requestAnimationFrame(function animate(now){
+				requestAnimationFrame(animate);
+				onRenderFcts.forEach(function(onRenderFct){
+					onRenderFct(now,now-previousTime)
+				})
+				previousTime=now
+			})
+
+			//Bildquelle definieren----------------------------------------------------------
+			var jsArucoMarker=new THREEx.JsArucoMarker()
+			if(location.hash==='')	location.hash=imagesource
+			if(location.hash==='#video'){
+				var videoGrabbing=new THREEx.VideoGrabbing()
+				jsArucoMarker.videoScaleDown=2
+			}else if(location.hash==='#webcam'){
+				var videoGrabbing=new THREEx.WebcamGrabbing()
+				jsArucoMarker.videoScaleDown=2
+			}else if(location.hash==='#image'){
+				var videoGrabbing=new THREEx.ImageGrabbing()
+				jsArucoMarker.videoScaleDown=10
+			}else console.assert(false)
+
+			document.body.appendChild(videoGrabbing.domElement)
+
+			//Bilderkennung-----------------------------------------------------------------
+			markerObject3D.visible=false
+			onRenderFcts.push(function(){
+				var domElement=videoGrabbing.domElement
+				var markers=jsArucoMarker.detectMarkers(domElement)
+				markerObject3D.visible=false
+				markers.forEach(function(marker){
+					jsArucoMarker.markerToObject3D(marker,markerObject3D)
+					markerObject3D.visible=true
+				})
+			})
+		</script>
+	</body>
+</html>
