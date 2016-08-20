@@ -34,7 +34,7 @@ a.three:link, a.three:visited{
 	display:block;
 	color: gray;
 	background-color:#404040;
-	width: 16.66%;
+	width: 20%;
 	height:30px;
 	text-align:center;
 	padding-top:5px;
@@ -53,7 +53,7 @@ a.four:link, a.four:visited{
 	display:block;
 	color: gray;
 	background-color:#262528;
-	width: 16.66%;
+	width: 20%;
 	height:30px;
 	text-align:center;
 	padding-top:5px;
