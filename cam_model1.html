@@ -20,9 +20,9 @@
 
 	<body>
 
-<!-- 		<div id='info' style="bottom:0px;">
+		<div id='info' style="bottom:0px;">
 			<a id='cambutton' class='scan'  href='javascript:void();'>Neuer Marker scannen</a>
-		</div> -->
+		</div>
 
 		<script>
 			var modelnumber='01'
@@ -45,9 +45,9 @@
 			})()
 			
 			//GUI------------------------------------------------------------------------------
-			//document.querySelector('#info .scan').addEventListener('click',function(event){
-			//	window.location.href="cam_selector.html";
-			//})		
+			document.querySelector('#info .scan').addEventListener('click',function(event){
+				window.location.href="cam_selector.html";
+			})		
 			
 			//Initialisierung-----------------------------------------------------------------
 			var renderer=new THREE.WebGLRenderer({
@@ -119,9 +119,7 @@
 				camera.updateProjectionMatrix()
 			},false)
 			onRenderFcts.push(function(){	
-				<!-- if(webglRenderEnabled===true){ -->
 					renderer.render(scene,camera);
-				<!-- } -->
 			})
 			
 			var previousTime=performance.now()
