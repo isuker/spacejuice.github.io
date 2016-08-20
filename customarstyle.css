@@ -5,6 +5,7 @@ body {
 	color: gray;
 	background-color: #404040;
 	min-width:540px;
+	overflow:hidden;
 }
 
 .headbar{

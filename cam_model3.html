@@ -13,7 +13,7 @@
 		<script src='vendor/js-aruco/posit1-patched.js'></script>
 		<script src='vendor/js-aruco/cv.js'></script>
 		<script src='vendor/js-aruco/aruco.js'></script>
-		<script src='js/threex.webcamgrabbing.js'></script>
+		<script src='js/threex.webcamgrabbing3.js'></script>
 		<script src='js/threex.jsarucomarker.js'></script>
 		<script src="vendor/three.js/loaders/OBJLoader.js"></script>
 	</head>
@@ -25,8 +25,8 @@
 		</div>
 
 		<script>
-			var modelnumber='01'
-			var modelscale=0.008
+			var modelnumber='03'
+			var modelscale=0.005
 			var imagesource='#webcam';
 			var webglRenderEnabled=true
 			//Funktionalitätstest--------------------------------------------------------------
@@ -46,7 +46,7 @@
 			
 			//GUI------------------------------------------------------------------------------
 			document.querySelector('#info .scan').addEventListener('click',function(event){
-				window.location.href="cam_selector.html";
+				window.location.href="cam_selector3.html";
 			})		
 			
 			//Initialisierung-----------------------------------------------------------------

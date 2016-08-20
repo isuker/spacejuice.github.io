@@ -13,7 +13,8 @@
 		<script src='vendor/js-aruco/posit1-patched.js'></script>
 		<script src='vendor/js-aruco/cv.js'></script>
 		<script src='vendor/js-aruco/aruco.js'></script>
-		<script src='js/threex.webcamgrabbing.js'></script>
+		<script src='js/threex.imagegrabbing2.js'></script>
+		<script src='js/threex.videograbbing2.js'></script> 
 		<script src='js/threex.jsarucomarker.js'></script>
 		<script src="vendor/three.js/loaders/OBJLoader.js"></script>
 	</head>
@@ -21,13 +22,17 @@
 	<body>
 
 		<div id='info'>
-			<a id='cambutton' class='scan'  href='javascript:void();'>Neuer Marker scannen</a>
+			<a id='button' class='scan'  href='javascript:void();'>Neuer Marker scannen</a>
+			<span id='infotext'> von </span> <a id='button' class='image'  href='javascript:void();'>Bild</a>
+			<a id='button' class='video'  href='javascript:void();'>Video</a>
+			<span id='infotext'> / Bewegungen </span> <a id='button' class='renderon' href='javascript:void();'>folgen</a>
+			<a id='button' class='renderoff' href='javascript:void();'>nicht folgen</a>
 		</div>
 
 		<script>
-			var modelnumber='01'
-			var modelscale=0.008
-			var imagesource='#webcam';
+			var modelnumber='02'
+			var modelscale=0.01
+			var imagesource=localStorage.source;
 			var webglRenderEnabled=true
 			//Funktionalitätstest--------------------------------------------------------------
 			;(function(){
@@ -45,9 +50,29 @@
 			})()
 			
 			//GUI------------------------------------------------------------------------------
+			document.querySelector('#info .image').addEventListener('click',function(event){
+				location.hash='#image'
+				localStorage.source='#image'
+				location.reload()
+			})
+
+			document.querySelector('#info .video').addEventListener('click',function(event){
+				location.hash='#video'
+				localStorage.source='#video'
+				location.reload()
+			})
+
 			document.querySelector('#info .scan').addEventListener('click',function(event){
-				window.location.href="cam_selector.html";
-			})		
+				window.location.href="selector2.html";
+			})
+			
+			document.querySelector('#info .renderon').addEventListener('click',function(event){
+				webglRenderEnabled=true
+			})
+
+			document.querySelector('#info .renderoff').addEventListener('click',function(event){
+				webglRenderEnabled=false
+			})			
 			
 			//Initialisierung-----------------------------------------------------------------
 			var renderer=new THREE.WebGLRenderer({
@@ -119,9 +144,9 @@
 				camera.updateProjectionMatrix()
 			},false)
 			onRenderFcts.push(function(){	
-				<!-- if(webglRenderEnabled===true){ -->
+				if(webglRenderEnabled===true){
 					renderer.render(scene,camera);
-				<!-- } -->
+				}
 			})
 			
 			var previousTime=performance.now()
