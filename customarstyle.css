@@ -132,14 +132,82 @@ a.four:hover, a.four:active {
 }
 
 #menubox {
-	display:block;
 	position:absolute;
+	margin-top:20px;
+	display:block;
 	color:gray;
-	top:30%;
 	width:50%;
 	left:25%;
 	font-weight:bolder;
 	font-size:150%;
 	line-height:50px;
 	text-align:center;
+	clear:both;
+}
+
+.gallery{
+	margin-top:140px;
+	display:inline-block;
+}
+
+div.img {
+	border: 1px solid #1a1a1a;
+	border-radius: 10px;
+	box-shadow:5px 5px 10px 0px black;
+	transition: all 0.1s ease-in-out 0s;
+}
+
+div.img:hover {
+    border: 1px solid #808080;
+	border-radius: 10px;
+	box-shadow:5px 5px 10px 0px black;
+	transform: scale(1.04,1.04);
+}
+
+div.img img {
+	width: 100%;
+    height: auto;
+	border-radius: 10px 10px 0px 0px;
+}
+
+div.desc {
+	padding: 10px;
+    text-align: center;
+	border-radius: 0px 0px 10px 10px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.responsive {
+    padding: 8px 8px;
+    float: left;
+    width: 24.99999%;
+}
+
+@media only screen and (max-width: 1000px){
+    .responsive {
+        width: 33.3333%;
+        margin: 6px 0;
+    }
+}
+
+@media only screen and (max-width: 800px){
+    .responsive {
+        width: 49.99999%;
+        margin: 6px 0;
+    }
+}
+
+@media handheld, only screen and (max-width: 600px){
+    .responsive {
+        width: 100%;
+    }
+}
+
+.clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
 }
