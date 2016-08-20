@@ -1,14 +1,78 @@
 body {
-	overflow:hidden;
+	margin: 0px;
+	font-family: Calibri, Arial, sans-serif;
+	font-size: 16px;
+	color: gray;
+	background-color: #404040;
+	min-width:540px;
+}
+
+.headbar{
+	position:fixed;
+	top:0px;
+	width:100%;
+	height:100px;
+	background:linear-gradient(#808080,#262528);
+	box-shadow:0px 5px 10px 0px black;
+	margin:0px;
+	z-index:100;
+}
+
+#navigation{
+	font-size:1.2em;
+	padding:0px 0px 0px 0px;
+	margin-left:20px;
+	float:left;
+}
+
+a{
+	color:#808080;
+	text-decoration:none;
+}
+
+a.three:link, a.three:visited{
+	display:block;
+	color: gray;
+	background-color:#404040;
+	width: 16.66%;
+	height:30px;
+	text-align:center;
+	padding-top:5px;
+	text-decoration:none;
+	position:fixed;
+	z-index:10;
+	box-shadow:0px 5px 10px 0px black;
+	transition: all 0.3s ease-in-out 0s;
+}
+
+a.three:hover, a.three:active {
+	background-color:#404040;
+}
+
+a.four:link, a.four:visited{
+	display:block;
+	color: gray;
+	background-color:#262528;
+	width: 16.66%;
+	height:30px;
+	text-align:center;
+	padding-top:5px;
+	text-decoration: none;
+	position:fixed;
+	z-index:10;
+	box-shadow:0px 5px 10px 0px black;
+	transition: all 0.3s ease-in-out 0s;
+}
+
+a.four:hover, a.four:active {
 	background-color:#404040;
 }
 
 #info {
 	position:absolute;
 	width:100%;
-	font-family:Calibri;
-	font-weight:bolder;
 	font-size:150%;
+	font-weight:bolder;
 	padding:20px;
 	line-height:50px;
 	text-align:center;
@@ -70,10 +134,9 @@ body {
 	display:block;
 	position:absolute;
 	color:gray;
-	top:10%;
+	top:30%;
 	width:50%;
 	left:25%;
-	font-family:Calibri;
 	font-weight:bolder;
 	font-size:150%;
 	line-height:50px;
