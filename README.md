@@ -1,5 +1,6 @@
-Web-based augmented reality with multiple markers
+Web-based augmented reality:
 
-<img src="./images/img01.jpg"></img>
-<img src="./images/img02.jpg"></img>
-<img src="./images/img03.jpg"></img>
+<img src="./images/img21.jpg"></img>
+<img src="./images/img22.jpg"></img>
+<img src="./images/img23.jpg"></img>
+<img src="./images/img24.jpg"></img>
