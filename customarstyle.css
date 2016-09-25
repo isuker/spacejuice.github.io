@@ -155,6 +155,7 @@ div.img {
 	border-radius: 10px;
 	box-shadow:5px 5px 10px 0px black;
 	transition: all 0.1s ease-in-out 0s;
+	background-color:#404040;
 }
 
 div.img:hover {
